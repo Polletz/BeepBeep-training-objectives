@@ -1,0 +1,89 @@
+swagger: "2.0"
+info:
+  title: beepbeep Training Service
+  description: returns info about beepbeep
+  license:
+    name: APLv2
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.1.0
+basePath: /api
+paths:
+    /training_objectives/{runner_id}:
+      get:
+       operationId: getTrainingObjectives
+       description: Get Training Objectives
+       produces:
+       - application/json
+       parameters:
+          - name: runner_id
+            in: path
+            description: ID of Runner
+            required: true
+            type: integer
+       responses:
+          '200':
+            description: List of training objectives
+          '400':
+            description: Bad request.
+          '404':
+            description: A runner with the specified ID was not found.
+          '5XX':
+            description: Unexpected error.
+    /add_training_objective:
+      post:
+        operationId: addTrainingObjective
+        description: Add Training Objective
+        consumes:
+        - application/json
+        parameters:
+        - in: body
+          name: training_objective
+          description: The training objective to create.
+          schema:
+            type: object
+            required:
+              - runner_id
+              - start_date
+              - end_date
+              - kilometers_to_run
+            properties:
+              runner_id:
+                type: integer
+                format: int32
+              start_date:
+                type: integer
+                format: int64
+              end_date:
+                type: integer
+                format: int64
+              kilometers_to_run:
+                type: number
+                format: float
+        responses:
+          '201':
+            description: Training Objective created. Id of the new training objective.
+          '400':
+            description: Bad request.
+          '404':
+            description: A runner with the specified ID was not found.
+          '5XX':
+            description: Unexpected error.
+    /delete_training_objectives/{runner_id}:
+      delete:
+        operationId: deleteTrainingObjectives
+        description: delete all training objectives of a runner.
+        parameters:
+          - name: runner_id
+            in: path
+            description: ID of Runner
+            required: true
+            type: integer
+        responses:
+          '204':
+            description: Training objectives was deleted successfully.
+          '400':
+            description: Bad request.
+          '404':
+            description: A runner with the specified ID was not found.
+          '5XX':
+            description: Unexpected error.
